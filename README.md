@@ -18,6 +18,13 @@ This project successfully sets up SQL Server 2025 in GitHub Codespaces using Doc
   - [SampleDatabase.sqlproj](SampleDatabase/SampleDatabase.sqlproj) - Project file
   - `bin/Debug/SampleDatabase.dacpac` - Generated dacpac file (after build)
 
+### tSQLt Unit Testing
+- [TSQLT_TESTING.md](TSQLT_TESTING.md) - Complete tSQLt testing guide
+- [tsqlt-framework/](tsqlt-framework/) - tSQLt framework files
+- [deploy-tsqlt-tests.sh](deploy-tsqlt-tests.sh) - Deploy test cases script
+- [run-tsqlt-tests.sh](run-tsqlt-tests.sh) - Run all tests script
+- Test environment on port 1434 with tSQLt v1.0.8083.3529 installed
+
 ## Quick Start
 
 1. Start SQL Server container:
@@ -103,13 +110,66 @@ docker exec sqlserver2025 /opt/mssql-tools18/bin/sqlcmd -S localhost -U SA -P 'Y
 
 For detailed deployment instructions, see [SampleDatabase/DEPLOYMENT.md](SampleDatabase/DEPLOYMENT.md)
 
+## Unit Testing with tSQLt
+
+This project includes a separate test environment with tSQLt framework installed for automated database unit testing.
+
+### Test Environment
+
+- **Test Server**: `sqlserver2025-test` on port 1434
+- **Test Database**: `SampleDatabase_Test`
+- **tSQLt Version**: 1.0.8083.3529
+- **CLR Enabled**: Yes (configured for Linux/Docker)
+
+### Quick Start
+
+1. **Start test server:**
+```bash
+docker-compose up -d sqlserver-test
+```
+
+2. **Deploy test cases:**
+```bash
+./deploy-tsqlt-tests.sh
+```
+
+3. **Run all tests:**
+```bash
+./run-tsqlt-tests.sh
+```
+
+### Test Results Example
+
+```
+Test Case Summary: 3 test case(s) executed, 3 succeeded, 0 failed
+- CustomerTests: test Customer insertion creates record with all fields ✓
+- ProductTests: test Product has correct default values ✓
+- ViewTests: test vw_CustomerOrderSummary calculates totals correctly ✓
+```
+
+### Available Tests
+
+- **CustomerTests**: Validates customer insertion and stored procedures
+- **ProductTests**: Validates product defaults and constraints
+- **ViewTests**: Validates view aggregation logic
+
+For complete testing documentation, see [TSQLT_TESTING.md](TSQLT_TESTING.md)
+
 ## Official Documentation
 
-Based on Microsoft's official SQL Server 2025 Docker documentation:
+### SQL Server & Docker
 - Image: `mcr.microsoft.com/mssql/server:2025-latest`
 - [Microsoft Learn - SQL Server on Docker](https://learn.microsoft.com/en-us/sql/linux/quickstart-install-connect-docker)
 - [GitHub - mssql-docker](https://github.com/microsoft/mssql-docker)
+
+### SQL Database Projects
 - [Microsoft Learn - SQL Database Projects](https://learn.microsoft.com/en-us/sql/tools/sql-database-projects/sql-database-projects)
 - [Microsoft Learn - Create and Deploy SQL Project](https://learn.microsoft.com/en-us/sql/tools/sql-database-projects/tutorials/create-deploy-sql-project)
+
+### tSQLt Unit Testing
+- [tSQLt Official Website](https://tsqlt.org/)
+- [tSQLt Downloads](https://tsqlt.org/downloads/)
+- [tSQLt GitHub Repository](https://github.com/tSQLt-org/tSQLt)
+- [SQL Server Unit Testing with tSQLt and Docker](https://www.sqlservercentral.com/blogs/how-to-use-tsqlt-unit-test-framework-with-a-sql-server-database-in-a-docker-container)
 
 
